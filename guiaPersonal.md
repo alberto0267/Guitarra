@@ -49,3 +49,11 @@ type: Object,
 required: true,
 },
 });
+
+"NOTE:"
+Lo que hace este código es calcular el total a pagar por todos los productos en el carrito de compras, multiplicando la cantidad de cada producto por su precio y sumando todo. Este valor se guarda en totalPagar, y si algún producto en el carrito cambia, totalPagar se actualizará automáticamente gracias a que es una propiedad computada.
+
+const totalPagar = computed(()=>{
+return props.carrito.reduce((total,producto) => total + (producto.cantidad \* producto.precio),0);
+
+})

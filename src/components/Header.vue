@@ -1,12 +1,28 @@
 <script setup>
+import { computed } from "vue";
 const props = defineProps({
   carrito: {
     type: Array,
     required: true,
   },
+  guitarraPromo: {
+    type: Object,
+    required: true,
+  },
 });
-
-defineEmits(["decrementar-cantidad", "incrementando-cantidad"]);
+const totalPagar = computed(() => {
+  return props.carrito.reduce(
+    (total, producto) => total + producto.cantidad * producto.precio,
+    0
+  );
+});
+defineEmits([
+  "decrementar-cantidad",
+  "incrementando-cantidad",
+  "agregar-carrito",
+  "eliminar-guitarra",
+  "vaciar-carrito",
+]);
 </script>
 <template>
   <header class="py-5 header">
@@ -70,18 +86,25 @@ defineEmits(["decrementar-cantidad", "incrementando-cantidad"]);
                       </button>
                     </td>
                     <td>
-                      <button class="btn btn-danger" type="button">X</button>
+                      <button
+                        class="btn btn-danger"
+                        type="button"
+                        @click="$emit('eliminar-guitarra', producto.id)"
+                      >
+                        X
+                      </button>
                     </td>
                   </tr>
                 </tbody>
               </table>
 
               <p v-if="carrito.length > 0" class="text-end">
-                Total pagar: <span class="fw-bold">$899</span>
+                Total pagar: <span class="fw-bold">€ {{ totalPagar }}</span>
               </p>
               <button
                 v-if="carrito.length > 0"
                 class="btn btn-dark w-100 mt-3 p-2"
+                @click="$emit('vaciar-carrito')"
               >
                 Vaciar Carrito
               </button>
@@ -93,17 +116,15 @@ defineEmits(["decrementar-cantidad", "incrementando-cantidad"]);
 
       <div class="row mt-5">
         <div class="col-md-6 text-center text-md-start pt-5">
-          <h1 class="display-2 fw-bold">Modelo VAI</h1>
+          <h1 class="display-2 fw-bold">Modelo {{ guitarraPromo.nombre }}</h1>
           <p class="mt-5 fs-5 text-white">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus,
-            possimus quibusdam dolor nemo velit quo, fuga omnis, iure molestias
-            optio tempore sint at ipsa dolorum odio exercitationem eos inventore
-            odit.
+            {{ guitarraPromo.descripcion }}
           </p>
-          <p class="text-primary fs-1 fw-black">$399</p>
+          <p class="text-primary fs-1 fw-black">€ {{ guitarraPromo.precio }}</p>
           <button
             type="button"
             class="btn fs-4 bg-primary text-white py-2 px-5"
+            @click="$emit('agregar-carrito', guitarraPromo)"
           >
             Agregar al Carrito
           </button>

@@ -797,6 +797,13 @@ button:not(:disabled),
 .header .header-guitarra {
   display: none;
 }
+img[alt="LogoAlberto"] {
+  width: 5rem;
+  display: flex;
+  padding-top: 0.5rem;
+  justify-self: center;
+  border-radius: 50%;
+}
 @media (min-width: 992px) {
   .header .header-guitarra {
     display: block;
